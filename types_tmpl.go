@@ -114,23 +114,52 @@ var typesTmpl = `
 	{{range .Elements}}
 		{{$name := .Name}}
 		{{if not .Type}}
-			{{/* ComplexTypeLocal */}}
-			{{with .ComplexType}}
-				type {{$name | replaceReservedWords | makePublic}} struct {
-					XMLName xml.Name ` + "`xml:\"{{$targetNamespace}} {{$name}}\"`" + `
-					{{if ne .ComplexContent.Extension.Base ""}}
-						{{template "ComplexContent" .ComplexContent}}
-					{{else if ne .SimpleContent.Extension.Base ""}}
-						{{template "SimpleContent" .SimpleContent}}
-					{{else}}
-						{{template "Elements" .Sequence}}
-						{{template "Any" .Any}}
-						{{template "Elements" .Choice}}
-						{{template "Elements" .SequenceChoice}}
-						{{template "Elements" .All}}
-						{{template "Attributes" .Attributes}}
+			{{if .ComplexType}}
+				{{/* ComplexTypeLocal */}}
+				{{with .ComplexType}}
+					type {{$name | replaceReservedWords | makePublic}} struct {
+						XMLName xml.Name ` + "`xml:\"{{$targetNamespace}} {{$name}}\"`" + `
+						{{if ne .ComplexContent.Extension.Base ""}}
+							{{template "ComplexContent" .ComplexContent}}
+						{{else if ne .SimpleContent.Extension.Base ""}}
+							{{template "SimpleContent" .SimpleContent}}
+						{{else}}
+							{{template "Elements" .Sequence}}
+							{{template "Any" .Any}}
+							{{template "Elements" .Choice}}
+							{{template "Elements" .SequenceChoice}}
+							{{template "Elements" .All}}
+							{{template "Attributes" .Attributes}}
+						{{end}}
+					}
+				{{end}}
+			{{else if .SimpleType}}
+				{{/* SimpleTypeLocal */}}
+				{{with .SimpleType}}
+					{{$type := replaceReservedWords $name | makePublic}}
+					{{if .Doc}} {{.Doc | comment}} {{end}}
+					{{if ne .List.ItemType ""}}
+						type {{$type}} []{{toGoType .List.ItemType }}
+					{{else if ne .Union.MemberTypes ""}}
+						type {{$type}} string
+					{{else if .Union.SimpleType}}
+						type {{$type}} string
+					{{else if .Restriction.Base}}
+						type {{$type}} {{toGoType .Restriction.Base}}
+				    {{else}}
+						type {{$type}} interface{}
 					{{end}}
-				}
+
+					{{if .Restriction.Enumeration}}
+					const (
+						{{with .Restriction}}
+							{{range .Enumeration}}
+								{{if .Doc}} {{.Doc | comment}} {{end}}
+								{{$type}}{{$value := replaceReservedWords .Value}}{{$value | makePublic}} {{$type}} = "{{goString .Value}}" {{end}}
+						{{end}}
+					)
+					{{end}}
+				{{end}}
 			{{end}}
 		{{else}}
 			{{if ne ($name | replaceReservedWords | makePublic) (toGoType .Type | removePointerFromType)}}
@@ -150,7 +179,7 @@ var typesTmpl = `
 				{{if ne $name $typ}}
 					XMLName xml.Name ` + "`xml:\"{{$targetNamespace}} {{$typ}}\"`" + `
 				{{end}}
-				
+
 				{{if ne .ComplexContent.Extension.Base ""}}
 					{{template "ComplexContent" .ComplexContent}}
 				{{else if ne .SimpleContent.Extension.Base ""}}
@@ -164,7 +193,7 @@ var typesTmpl = `
 					{{template "Attributes" .Attributes}}
 				{{end}}
 			}
-		{{end}}	
+		{{end}}
 	{{end}}
 {{end}}
 `

@@ -5,6 +5,10 @@
 package gowsdl
 
 var typesTmpl = `
+{{define "GoTypePrefix" -}}
+	{{if eq .MaxOccurs "unbounded"}}[]{{end}}{{if or (eq .MinOccurs "0") (.Nillable)}}*{{end}}
+{{- end}}
+
 {{define "SimpleType"}}
 	{{$type := replaceReservedWords .Name | makePublic}}
 	{{if .Doc}} {{.Doc | comment}} {{end}}
@@ -58,7 +62,7 @@ var typesTmpl = `
 {{end}}
 
 {{define "ComplexTypeInline"}}
-	{{replaceReservedWords .Name | makePublic}} {{if eq .MaxOccurs "unbounded"}}[]{{end}}struct {
+	{{replaceReservedWords .Name | makePublic}} {{template "GoTypePrefix" .}}struct {
 	{{with .ComplexType}}
 		{{if ne .ComplexContent.Extension.Base ""}}
 			{{template "ComplexContent" .ComplexContent}}
@@ -78,7 +82,7 @@ var typesTmpl = `
 {{define "Elements"}}
 	{{range .}}
 		{{if ne .Ref ""}}
-			{{removeNS .Ref | replaceReservedWords  | makePublic}} {{if eq .MaxOccurs "unbounded"}}[]{{end}}{{.Ref | toGoType}} ` + "`" + `xml:"{{.Ref | removeNS}},omitempty" json:"{{.Ref | removeNS}},omitempty"` + "`" + `
+			{{removeNS .Ref | replaceReservedWords  | makePublic}} {{template "GoTypePrefix" .}}{{.Ref | toGoType | removePointerFromType}} ` + "`" + `xml:"{{.Ref | removeNS}},omitempty" json:"{{.Ref | removeNS}},omitempty"` + "`" + `
 		{{else}}
 		{{if not .Type}}
 			{{if .SimpleType}}
@@ -93,7 +97,7 @@ var typesTmpl = `
 			{{end}}
 		{{else}}
 			{{if .Doc}}{{.Doc | comment}} {{end}}
-			{{replaceAttrReservedWords .Name | makeFieldPublic}} {{if eq .MaxOccurs "unbounded"}}[]{{end}}{{.Type | toGoType}} ` + "`" + `xml:"{{.Name}},omitempty" json:"{{.Name}},omitempty"` + "`" + ` {{end}}
+			{{replaceAttrReservedWords .Name | makeFieldPublic}} {{template "GoTypePrefix" .}}{{.Type | toGoType | removePointerFromType}} ` + "`" + `xml:"{{.Name}},omitempty" json:"{{.Name}},omitempty"` + "`" + ` {{end}}
 		{{end}}
 	{{end}}
 {{end}}

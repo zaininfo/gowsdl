@@ -47,13 +47,13 @@ type DocumentIdentification struct {
 
 	Type string `xml:"Type,omitempty" json:"Type,omitempty"`
 
-	MultipleType bool `xml:"MultipleType,omitempty" json:"MultipleType,omitempty"`
+	MultipleType *bool `xml:"MultipleType,omitempty" json:"MultipleType,omitempty"`
 
 	CreationDateAndTime string `xml:"CreationDateAndTime,omitempty" json:"CreationDateAndTime,omitempty"`
 }
 
 type Partner struct {
-	Identifier *PartnerIdentification `xml:"Identifier,omitempty" json:"Identifier,omitempty"`
+	Identifier PartnerIdentification `xml:"Identifier,omitempty" json:"Identifier,omitempty"`
 
 	ContactInformation []*ContactInformation `xml:"ContactInformation,omitempty" json:"ContactInformation,omitempty"`
 }
@@ -63,13 +63,13 @@ type PartnerIdentification string
 type ContactInformation struct {
 	Contact string `xml:"Contact,omitempty" json:"Contact,omitempty"`
 
-	EmailAddress string `xml:"EmailAddress,omitempty" json:"EmailAddress,omitempty"`
+	EmailAddress *string `xml:"EmailAddress,omitempty" json:"EmailAddress,omitempty"`
 
-	FaxNumber string `xml:"FaxNumber,omitempty" json:"FaxNumber,omitempty"`
+	FaxNumber *string `xml:"FaxNumber,omitempty" json:"FaxNumber,omitempty"`
 
-	TelephoneNumber string `xml:"TelephoneNumber,omitempty" json:"TelephoneNumber,omitempty"`
+	TelephoneNumber *string `xml:"TelephoneNumber,omitempty" json:"TelephoneNumber,omitempty"`
 
-	ContactTypeIdentifier string `xml:"ContactTypeIdentifier,omitempty" json:"ContactTypeIdentifier,omitempty"`
+	ContactTypeIdentifier *string `xml:"ContactTypeIdentifier,omitempty" json:"ContactTypeIdentifier,omitempty"`
 }
 
 // The MIME type as defined by IANA. Please refer to
@@ -86,17 +86,17 @@ type Language string
 type Manifest struct {
 	NumberOfItems int32 `xml:"NumberOfItems,omitempty" json:"NumberOfItems,omitempty"`
 
-	ManifestItem []*ManifestItem `xml:"ManifestItem,omitempty" json:"ManifestItem,omitempty"`
+	ManifestItem []ManifestItem `xml:"ManifestItem,omitempty" json:"ManifestItem,omitempty"`
 }
 
 type ManifestItem struct {
-	MimeTypeQualifierCode *MimeTypeQualifier `xml:"MimeTypeQualifierCode,omitempty" json:"MimeTypeQualifierCode,omitempty"`
+	MimeTypeQualifierCode MimeTypeQualifier `xml:"MimeTypeQualifierCode,omitempty" json:"MimeTypeQualifierCode,omitempty"`
 
 	UniformResourceIdentifier AnyURI `xml:"UniformResourceIdentifier,omitempty" json:"UniformResourceIdentifier,omitempty"`
 
-	Description string `xml:"Description,omitempty" json:"Description,omitempty"`
+	Description *string `xml:"Description,omitempty" json:"Description,omitempty"`
 
-	LanguageCode string `xml:"LanguageCode,omitempty" json:"LanguageCode,omitempty"`
+	LanguageCode *string `xml:"LanguageCode,omitempty" json:"LanguageCode,omitempty"`
 }
 
 type TypeOfServiceTransaction string
@@ -118,15 +118,15 @@ type Scope struct {
 }
 
 type CorrelationInformation struct {
-	RequestingDocumentCreationDateTime string `xml:"RequestingDocumentCreationDateTime,omitempty" json:"RequestingDocumentCreationDateTime,omitempty"`
+	RequestingDocumentCreationDateTime *string `xml:"RequestingDocumentCreationDateTime,omitempty" json:"RequestingDocumentCreationDateTime,omitempty"`
 
-	RequestingDocumentInstanceIdentifier string `xml:"RequestingDocumentInstanceIdentifier,omitempty" json:"RequestingDocumentInstanceIdentifier,omitempty"`
+	RequestingDocumentInstanceIdentifier *string `xml:"RequestingDocumentInstanceIdentifier,omitempty" json:"RequestingDocumentInstanceIdentifier,omitempty"`
 
-	ExpectedResponseDateTime string `xml:"ExpectedResponseDateTime,omitempty" json:"ExpectedResponseDateTime,omitempty"`
+	ExpectedResponseDateTime *string `xml:"ExpectedResponseDateTime,omitempty" json:"ExpectedResponseDateTime,omitempty"`
 }
 
 type BusinessService struct {
-	BusinessServiceName string `xml:"BusinessServiceName,omitempty" json:"BusinessServiceName,omitempty"`
+	BusinessServiceName *string `xml:"BusinessServiceName,omitempty" json:"BusinessServiceName,omitempty"`
 
 	ServiceTransaction *ServiceTransaction `xml:"ServiceTransaction,omitempty" json:"ServiceTransaction,omitempty"`
 }
@@ -156,11 +156,11 @@ type ServiceTransaction struct {
 type StandardBusinessDocumentHeader struct {
 	HeaderVersion string `xml:"HeaderVersion,omitempty" json:"HeaderVersion,omitempty"`
 
-	Sender []*Partner `xml:"Sender,omitempty" json:"Sender,omitempty"`
+	Sender []Partner `xml:"Sender,omitempty" json:"Sender,omitempty"`
 
-	Receiver []*Partner `xml:"Receiver,omitempty" json:"Receiver,omitempty"`
+	Receiver []Partner `xml:"Receiver,omitempty" json:"Receiver,omitempty"`
 
-	DocumentIdentification *DocumentIdentification `xml:"DocumentIdentification,omitempty" json:"DocumentIdentification,omitempty"`
+	DocumentIdentification DocumentIdentification `xml:"DocumentIdentification,omitempty" json:"DocumentIdentification,omitempty"`
 
 	Manifest *Manifest `xml:"Manifest,omitempty" json:"Manifest,omitempty"`
 
@@ -220,7 +220,7 @@ type EPCISDocumentType struct {
 
 	EPCISHeader *EPCISHeaderType `xml:"EPCISHeader,omitempty" json:"EPCISHeader,omitempty"`
 
-	EPCISBody *EPCISBodyType `xml:"EPCISBody,omitempty" json:"EPCISBody,omitempty"`
+	EPCISBody EPCISBodyType `xml:"EPCISBody,omitempty" json:"EPCISBody,omitempty"`
 
 	Extension *EPCISDocumentExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 }
@@ -230,7 +230,7 @@ type EPCISDocumentExtensionType struct {
 }
 
 type EPCISHeaderType struct {
-	StandardBusinessDocumentHeader *StandardBusinessDocumentHeader `xml:"StandardBusinessDocumentHeader,omitempty" json:"StandardBusinessDocumentHeader,omitempty"`
+	StandardBusinessDocumentHeader StandardBusinessDocumentHeader `xml:"StandardBusinessDocumentHeader,omitempty" json:"StandardBusinessDocumentHeader,omitempty"`
 
 	Extension *EPCISHeaderExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 
@@ -248,7 +248,7 @@ type EPCISHeaderExtension2Type struct {
 }
 
 type EPCISMasterDataType struct {
-	VocabularyList *VocabularyListType `xml:"VocabularyList,omitempty" json:"VocabularyList,omitempty"`
+	VocabularyList VocabularyListType `xml:"VocabularyList,omitempty" json:"VocabularyList,omitempty"`
 
 	Extension *EPCISMasterDataExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 }
@@ -272,7 +272,7 @@ type VocabularyType struct {
 }
 
 type VocabularyElementListType struct {
-	VocabularyElement []*VocabularyElementType `xml:"VocabularyElement,omitempty" json:"VocabularyElement,omitempty"`
+	VocabularyElement []VocabularyElementType `xml:"VocabularyElement,omitempty" json:"VocabularyElement,omitempty"`
 }
 
 type VocabularyElementType struct {
@@ -294,7 +294,7 @@ type AttributeType struct {
 }
 
 type IDListType struct {
-	Id []AnyURI `xml:"id,omitempty" json:"id,omitempty"`
+	Id []*AnyURI `xml:"id,omitempty" json:"id,omitempty"`
 }
 
 type VocabularyExtensionType struct {
@@ -326,13 +326,13 @@ type EventListType struct {
 
 	TransactionEvent []*TransactionEventType `xml:"TransactionEvent,omitempty" json:"TransactionEvent,omitempty"`
 
-	Extension *EPCISEventListExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
+	Extension EPCISEventListExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 }
 
 type EPCISEventListExtensionType struct {
-	TransformationEvent *TransformationEventType `xml:"TransformationEvent,omitempty" json:"TransformationEvent,omitempty"`
+	TransformationEvent TransformationEventType `xml:"TransformationEvent,omitempty" json:"TransformationEvent,omitempty"`
 
-	Extension *EPCISEventListExtension2Type `xml:"extension,omitempty" json:"extension,omitempty"`
+	Extension EPCISEventListExtension2Type `xml:"extension,omitempty" json:"extension,omitempty"`
 }
 
 type EPCISEventListExtension2Type struct {
@@ -344,7 +344,7 @@ type EPCListType struct {
 }
 
 type QuantityElementType struct {
-	EpcClass *EPCClassType `xml:"epcClass,omitempty" json:"epcClass,omitempty"`
+	EpcClass EPCClassType `xml:"epcClass,omitempty" json:"epcClass,omitempty"`
 }
 
 type QuantityListType struct {
@@ -352,7 +352,7 @@ type QuantityListType struct {
 }
 
 type ReadPointType struct {
-	Id *ReadPointIDType `xml:"id,omitempty" json:"id,omitempty"`
+	Id ReadPointIDType `xml:"id,omitempty" json:"id,omitempty"`
 
 	Extension *ReadPointExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 
@@ -364,7 +364,7 @@ type ReadPointExtensionType struct {
 }
 
 type BusinessLocationType struct {
-	Id *BusinessLocationIDType `xml:"id,omitempty" json:"id,omitempty"`
+	Id BusinessLocationIDType `xml:"id,omitempty" json:"id,omitempty"`
 
 	Extension *BusinessLocationExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 
@@ -382,7 +382,7 @@ type BusinessTransactionType struct {
 }
 
 type BusinessTransactionListType struct {
-	BizTransaction []*BusinessTransactionType `xml:"bizTransaction,omitempty" json:"bizTransaction,omitempty"`
+	BizTransaction []BusinessTransactionType `xml:"bizTransaction,omitempty" json:"bizTransaction,omitempty"`
 }
 
 type SourceDestType struct {
@@ -392,11 +392,11 @@ type SourceDestType struct {
 }
 
 type SourceListType struct {
-	Source []*SourceDestType `xml:"source,omitempty" json:"source,omitempty"`
+	Source []SourceDestType `xml:"source,omitempty" json:"source,omitempty"`
 }
 
 type DestinationListType struct {
-	Destination []*SourceDestType `xml:"destination,omitempty" json:"destination,omitempty"`
+	Destination []SourceDestType `xml:"destination,omitempty" json:"destination,omitempty"`
 }
 
 type ILMDType struct {
@@ -432,7 +432,7 @@ type ErrorDeclarationExtensionType struct {
 type EPCISEventType struct {
 	EventTime string `xml:"eventTime,omitempty" json:"eventTime,omitempty"`
 
-	RecordTime string `xml:"recordTime,omitempty" json:"recordTime,omitempty"`
+	RecordTime *string `xml:"recordTime,omitempty" json:"recordTime,omitempty"`
 
 	EventTimeZoneOffset string `xml:"eventTimeZoneOffset,omitempty" json:"eventTimeZoneOffset,omitempty"`
 
@@ -454,9 +454,9 @@ type EPCISEventExtension2Type struct {
 type ObjectEventType struct {
 	*EPCISEventType
 
-	EpcList *EPCListType `xml:"epcList,omitempty" json:"epcList,omitempty"`
+	EpcList EPCListType `xml:"epcList,omitempty" json:"epcList,omitempty"`
 
-	Action *ActionType `xml:"action,omitempty" json:"action,omitempty"`
+	Action ActionType `xml:"action,omitempty" json:"action,omitempty"`
 
 	BizStep *BusinessStepIDType `xml:"bizStep,omitempty" json:"bizStep,omitempty"`
 
@@ -492,9 +492,9 @@ type AggregationEventType struct {
 
 	ParentID *ParentIDType `xml:"parentID,omitempty" json:"parentID,omitempty"`
 
-	ChildEPCs *EPCListType `xml:"childEPCs,omitempty" json:"childEPCs,omitempty"`
+	ChildEPCs EPCListType `xml:"childEPCs,omitempty" json:"childEPCs,omitempty"`
 
-	Action *ActionType `xml:"action,omitempty" json:"action,omitempty"`
+	Action ActionType `xml:"action,omitempty" json:"action,omitempty"`
 
 	BizStep *BusinessStepIDType `xml:"bizStep,omitempty" json:"bizStep,omitempty"`
 
@@ -526,7 +526,7 @@ type AggregationEventExtension2Type struct {
 type QuantityEventType struct {
 	*EPCISEventType
 
-	EpcClass *EPCClassType `xml:"epcClass,omitempty" json:"epcClass,omitempty"`
+	EpcClass EPCClassType `xml:"epcClass,omitempty" json:"epcClass,omitempty"`
 
 	Quantity int32 `xml:"quantity,omitempty" json:"quantity,omitempty"`
 
@@ -550,13 +550,13 @@ type QuantityEventExtensionType struct {
 type TransactionEventType struct {
 	*EPCISEventType
 
-	BizTransactionList *BusinessTransactionListType `xml:"bizTransactionList,omitempty" json:"bizTransactionList,omitempty"`
+	BizTransactionList BusinessTransactionListType `xml:"bizTransactionList,omitempty" json:"bizTransactionList,omitempty"`
 
 	ParentID *ParentIDType `xml:"parentID,omitempty" json:"parentID,omitempty"`
 
-	EpcList *EPCListType `xml:"epcList,omitempty" json:"epcList,omitempty"`
+	EpcList EPCListType `xml:"epcList,omitempty" json:"epcList,omitempty"`
 
-	Action *ActionType `xml:"action,omitempty" json:"action,omitempty"`
+	Action ActionType `xml:"action,omitempty" json:"action,omitempty"`
 
 	BizStep *BusinessStepIDType `xml:"bizStep,omitempty" json:"bizStep,omitempty"`
 
@@ -654,7 +654,7 @@ type EPCISQueryDocumentType struct {
 
 	EPCISHeader *EPCISHeaderType `xml:"EPCISHeader,omitempty" json:"EPCISHeader,omitempty"`
 
-	EPCISBody *EPCISQueryBodyType `xml:"EPCISBody,omitempty" json:"EPCISBody,omitempty"`
+	EPCISBody EPCISQueryBodyType `xml:"EPCISBody,omitempty" json:"EPCISBody,omitempty"`
 
 	Extension *EPCISQueryDocumentExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 }
@@ -664,69 +664,69 @@ type EPCISQueryDocumentExtensionType struct {
 }
 
 type EPCISQueryBodyType struct {
-	GetQueryNames *GetQueryNames `xml:"GetQueryNames,omitempty" json:"GetQueryNames,omitempty"`
+	GetQueryNames GetQueryNames `xml:"GetQueryNames,omitempty" json:"GetQueryNames,omitempty"`
 
-	GetQueryNamesResult *GetQueryNamesResult `xml:"GetQueryNamesResult,omitempty" json:"GetQueryNamesResult,omitempty"`
+	GetQueryNamesResult GetQueryNamesResult `xml:"GetQueryNamesResult,omitempty" json:"GetQueryNamesResult,omitempty"`
 
-	Subscribe *Subscribe `xml:"Subscribe,omitempty" json:"Subscribe,omitempty"`
+	Subscribe Subscribe `xml:"Subscribe,omitempty" json:"Subscribe,omitempty"`
 
-	SubscribeResult *SubscribeResult `xml:"SubscribeResult,omitempty" json:"SubscribeResult,omitempty"`
+	SubscribeResult SubscribeResult `xml:"SubscribeResult,omitempty" json:"SubscribeResult,omitempty"`
 
-	Unsubscribe *Unsubscribe `xml:"Unsubscribe,omitempty" json:"Unsubscribe,omitempty"`
+	Unsubscribe Unsubscribe `xml:"Unsubscribe,omitempty" json:"Unsubscribe,omitempty"`
 
-	UnsubscribeResult *UnsubscribeResult `xml:"UnsubscribeResult,omitempty" json:"UnsubscribeResult,omitempty"`
+	UnsubscribeResult UnsubscribeResult `xml:"UnsubscribeResult,omitempty" json:"UnsubscribeResult,omitempty"`
 
-	GetSubscriptionIDs *GetSubscriptionIDs `xml:"GetSubscriptionIDs,omitempty" json:"GetSubscriptionIDs,omitempty"`
+	GetSubscriptionIDs GetSubscriptionIDs `xml:"GetSubscriptionIDs,omitempty" json:"GetSubscriptionIDs,omitempty"`
 
-	GetSubscriptionIDsResult *GetSubscriptionIDsResult `xml:"GetSubscriptionIDsResult,omitempty" json:"GetSubscriptionIDsResult,omitempty"`
+	GetSubscriptionIDsResult GetSubscriptionIDsResult `xml:"GetSubscriptionIDsResult,omitempty" json:"GetSubscriptionIDsResult,omitempty"`
 
-	Poll *Poll `xml:"Poll,omitempty" json:"Poll,omitempty"`
+	Poll Poll `xml:"Poll,omitempty" json:"Poll,omitempty"`
 
-	GetStandardVersion *GetStandardVersion `xml:"GetStandardVersion,omitempty" json:"GetStandardVersion,omitempty"`
+	GetStandardVersion GetStandardVersion `xml:"GetStandardVersion,omitempty" json:"GetStandardVersion,omitempty"`
 
-	GetStandardVersionResult *GetStandardVersionResult `xml:"GetStandardVersionResult,omitempty" json:"GetStandardVersionResult,omitempty"`
+	GetStandardVersionResult GetStandardVersionResult `xml:"GetStandardVersionResult,omitempty" json:"GetStandardVersionResult,omitempty"`
 
-	GetVendorVersion *GetVendorVersion `xml:"GetVendorVersion,omitempty" json:"GetVendorVersion,omitempty"`
+	GetVendorVersion GetVendorVersion `xml:"GetVendorVersion,omitempty" json:"GetVendorVersion,omitempty"`
 
-	GetVendorVersionResult *GetVendorVersionResult `xml:"GetVendorVersionResult,omitempty" json:"GetVendorVersionResult,omitempty"`
+	GetVendorVersionResult GetVendorVersionResult `xml:"GetVendorVersionResult,omitempty" json:"GetVendorVersionResult,omitempty"`
 
-	DuplicateNameException *DuplicateNameException `xml:"DuplicateNameException,omitempty" json:"DuplicateNameException,omitempty"`
+	DuplicateNameException DuplicateNameException `xml:"DuplicateNameException,omitempty" json:"DuplicateNameException,omitempty"`
 
-	InvalidURIException *InvalidURIException `xml:"InvalidURIException,omitempty" json:"InvalidURIException,omitempty"`
+	InvalidURIException InvalidURIException `xml:"InvalidURIException,omitempty" json:"InvalidURIException,omitempty"`
 
-	NoSuchNameException *NoSuchNameException `xml:"NoSuchNameException,omitempty" json:"NoSuchNameException,omitempty"`
+	NoSuchNameException NoSuchNameException `xml:"NoSuchNameException,omitempty" json:"NoSuchNameException,omitempty"`
 
-	NoSuchSubscriptionException *NoSuchSubscriptionException `xml:"NoSuchSubscriptionException,omitempty" json:"NoSuchSubscriptionException,omitempty"`
+	NoSuchSubscriptionException NoSuchSubscriptionException `xml:"NoSuchSubscriptionException,omitempty" json:"NoSuchSubscriptionException,omitempty"`
 
-	DuplicateSubscriptionException *DuplicateSubscriptionException `xml:"DuplicateSubscriptionException,omitempty" json:"DuplicateSubscriptionException,omitempty"`
+	DuplicateSubscriptionException DuplicateSubscriptionException `xml:"DuplicateSubscriptionException,omitempty" json:"DuplicateSubscriptionException,omitempty"`
 
-	QueryParameterException *QueryParameterException `xml:"QueryParameterException,omitempty" json:"QueryParameterException,omitempty"`
+	QueryParameterException QueryParameterException `xml:"QueryParameterException,omitempty" json:"QueryParameterException,omitempty"`
 
-	QueryTooLargeException *QueryTooLargeException `xml:"QueryTooLargeException,omitempty" json:"QueryTooLargeException,omitempty"`
+	QueryTooLargeException QueryTooLargeException `xml:"QueryTooLargeException,omitempty" json:"QueryTooLargeException,omitempty"`
 
-	QueryTooComplexException *QueryTooComplexException `xml:"QueryTooComplexException,omitempty" json:"QueryTooComplexException,omitempty"`
+	QueryTooComplexException QueryTooComplexException `xml:"QueryTooComplexException,omitempty" json:"QueryTooComplexException,omitempty"`
 
-	SubscriptionControlsException *SubscriptionControlsException `xml:"SubscriptionControlsException,omitempty" json:"SubscriptionControlsException,omitempty"`
+	SubscriptionControlsException SubscriptionControlsException `xml:"SubscriptionControlsException,omitempty" json:"SubscriptionControlsException,omitempty"`
 
-	SubscribeNotPermittedException *SubscribeNotPermittedException `xml:"SubscribeNotPermittedException,omitempty" json:"SubscribeNotPermittedException,omitempty"`
+	SubscribeNotPermittedException SubscribeNotPermittedException `xml:"SubscribeNotPermittedException,omitempty" json:"SubscribeNotPermittedException,omitempty"`
 
-	SecurityException *SecurityException `xml:"SecurityException,omitempty" json:"SecurityException,omitempty"`
+	SecurityException SecurityException `xml:"SecurityException,omitempty" json:"SecurityException,omitempty"`
 
-	ValidationException *ValidationException `xml:"ValidationException,omitempty" json:"ValidationException,omitempty"`
+	ValidationException ValidationException `xml:"ValidationException,omitempty" json:"ValidationException,omitempty"`
 
-	ImplementationException *ImplementationException `xml:"ImplementationException,omitempty" json:"ImplementationException,omitempty"`
+	ImplementationException ImplementationException `xml:"ImplementationException,omitempty" json:"ImplementationException,omitempty"`
 
-	QueryResults *QueryResults `xml:"QueryResults,omitempty" json:"QueryResults,omitempty"`
+	QueryResults QueryResults `xml:"QueryResults,omitempty" json:"QueryResults,omitempty"`
 }
 
 type Subscribe struct {
 	QueryName string `xml:"queryName,omitempty" json:"queryName,omitempty"`
 
-	Params *QueryParams `xml:"params,omitempty" json:"params,omitempty"`
+	Params QueryParams `xml:"params,omitempty" json:"params,omitempty"`
 
 	Dest AnyURI `xml:"dest,omitempty" json:"dest,omitempty"`
 
-	Controls *SubscriptionControls `xml:"controls,omitempty" json:"controls,omitempty"`
+	Controls SubscriptionControls `xml:"controls,omitempty" json:"controls,omitempty"`
 
 	SubscriptionID string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
 }
@@ -742,7 +742,7 @@ type GetSubscriptionIDs struct {
 type Poll struct {
 	QueryName string `xml:"queryName,omitempty" json:"queryName,omitempty"`
 
-	Params *QueryParams `xml:"params,omitempty" json:"params,omitempty"`
+	Params QueryParams `xml:"params,omitempty" json:"params,omitempty"`
 }
 
 type VoidHolder struct {
@@ -756,15 +756,15 @@ type EmptyParms struct {
 type ArrayOfString struct {
 	XMLName xml.Name `xml:"urn:epcglobal:epcis-query:xsd:1 GetQueryNamesResult"`
 
-	Astring []string `xml:"string,omitempty" json:"string,omitempty"`
+	Astring []*string `xml:"string,omitempty" json:"string,omitempty"`
 }
 
 type SubscriptionControls struct {
 	Schedule *QuerySchedule `xml:"schedule,omitempty" json:"schedule,omitempty"`
 
-	Trigger AnyURI `xml:"trigger,omitempty" json:"trigger,omitempty"`
+	Trigger *AnyURI `xml:"trigger,omitempty" json:"trigger,omitempty"`
 
-	InitialRecordTime string `xml:"initialRecordTime,omitempty" json:"initialRecordTime,omitempty"`
+	InitialRecordTime *string `xml:"initialRecordTime,omitempty" json:"initialRecordTime,omitempty"`
 
 	ReportIfEmpty bool `xml:"reportIfEmpty,omitempty" json:"reportIfEmpty,omitempty"`
 
@@ -778,17 +778,17 @@ type SubscriptionControlsExtensionType struct {
 }
 
 type QuerySchedule struct {
-	Second string `xml:"second,omitempty" json:"second,omitempty"`
+	Second *string `xml:"second,omitempty" json:"second,omitempty"`
 
-	Minute string `xml:"minute,omitempty" json:"minute,omitempty"`
+	Minute *string `xml:"minute,omitempty" json:"minute,omitempty"`
 
-	Hour string `xml:"hour,omitempty" json:"hour,omitempty"`
+	Hour *string `xml:"hour,omitempty" json:"hour,omitempty"`
 
-	DayOfMonth string `xml:"dayOfMonth,omitempty" json:"dayOfMonth,omitempty"`
+	DayOfMonth *string `xml:"dayOfMonth,omitempty" json:"dayOfMonth,omitempty"`
 
-	Month string `xml:"month,omitempty" json:"month,omitempty"`
+	Month *string `xml:"month,omitempty" json:"month,omitempty"`
 
-	DayOfWeek string `xml:"dayOfWeek,omitempty" json:"dayOfWeek,omitempty"`
+	DayOfWeek *string `xml:"dayOfWeek,omitempty" json:"dayOfWeek,omitempty"`
 
 	Extension *QueryScheduleExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 
@@ -812,9 +812,9 @@ type QueryParam struct {
 type QueryResults struct {
 	QueryName string `xml:"queryName,omitempty" json:"queryName,omitempty"`
 
-	SubscriptionID string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
+	SubscriptionID *string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
 
-	ResultsBody *QueryResultsBody `xml:"resultsBody,omitempty" json:"resultsBody,omitempty"`
+	ResultsBody QueryResultsBody `xml:"resultsBody,omitempty" json:"resultsBody,omitempty"`
 
 	Extension *QueryResultsExtensionType `xml:"extension,omitempty" json:"extension,omitempty"`
 
@@ -826,9 +826,9 @@ type QueryResultsExtensionType struct {
 }
 
 type QueryResultsBody struct {
-	EventList *EventListType `xml:"EventList,omitempty" json:"EventList,omitempty"`
+	EventList EventListType `xml:"EventList,omitempty" json:"EventList,omitempty"`
 
-	VocabularyList *VocabularyListType `xml:"VocabularyList,omitempty" json:"VocabularyList,omitempty"`
+	VocabularyList VocabularyListType `xml:"VocabularyList,omitempty" json:"VocabularyList,omitempty"`
 }
 
 type EPCISException struct {
@@ -862,9 +862,9 @@ type QueryParameterException struct {
 type QueryTooLargeException struct {
 	*EPCISException
 
-	QueryName string `xml:"queryName,omitempty" json:"queryName,omitempty"`
+	QueryName *string `xml:"queryName,omitempty" json:"queryName,omitempty"`
 
-	SubscriptionID string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
+	SubscriptionID *string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
 }
 
 type QueryTooComplexException struct {
@@ -890,11 +890,11 @@ type ValidationException struct {
 type ImplementationException struct {
 	*EPCISException
 
-	Severity *ImplementationExceptionSeverity `xml:"severity,omitempty" json:"severity,omitempty"`
+	Severity ImplementationExceptionSeverity `xml:"severity,omitempty" json:"severity,omitempty"`
 
-	QueryName string `xml:"queryName,omitempty" json:"queryName,omitempty"`
+	QueryName *string `xml:"queryName,omitempty" json:"queryName,omitempty"`
 
-	SubscriptionID string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
+	SubscriptionID *string `xml:"subscriptionID,omitempty" json:"subscriptionID,omitempty"`
 }
 
 type EPCISServicePortType interface {
